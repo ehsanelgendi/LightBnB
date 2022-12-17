@@ -103,12 +103,60 @@ exports.getAllReservations = getAllReservations;
  * @return {Promise<[{}]>}  A promise to the properties.
  */
 const getAllProperties = function(options, limit = 10) {
+  const queryParams = [];
+  let queryString = `
+  SELECT properties.*, avg(property_reviews.rating) as average_rating
+  FROM properties
+  JOIN property_reviews ON properties.id = property_id
+  WHERE 1=1
+  `;
+
+  // check user input options
+  // query if user is checking their properties
+  if (options.owner_id) {
+    queryParams.push(options.owner_id);
+    queryString += `AND owner_id = $${queryParams.length} `;
+  }
+
+  // query if user input a city
+  if (options.city) {
+    queryParams.push(`%${options.city}%`);
+    queryString += `AND city LIKE $${queryParams.length} `;
+  }
+
+  // query if user input a minimum_price_per_night
+  if (options.minimum_price_per_night) {
+    queryParams.push((options.minimum_price_per_night)*100);
+    queryString += `AND cost_per_night >= $${queryParams.length} `;
+  }
+
+  // query if user input a maximum_price_per_night
+  if (options.maximum_price_per_night) {
+    queryParams.push((options.maximum_price_per_night)*100);
+    if (options.minimum_price_per_night) {
+      queryString += `AND cost_per_night BETWEEN $${queryParams.length - 1} AND $${queryParams.length}`;
+    } else {
+      queryString += `AND cost_per_night <= $${queryParams.length}`;
+    }
+  }
+
+  // query if user input a city
+  if (options.minimum_rating) {
+    queryParams.push(options.minimum_rating);
+    queryString += `AND rating >= $${queryParams.length}`;
+  }
+
+  // concat the rest of the query, 
+  queryParams.push(limit);
+  queryString += `
+  GROUP BY properties.id
+  ORDER BY cost_per_night
+  LIMIT $${queryParams.length};
+  `;
+
   return pool
-    .query(`SELECT * FROM properties LIMIT $1`, [limit])
-    .then((result) => {
-      //console.log(result.rows);
-      return result.rows;
-    })
+    .query(queryString, queryParams)
+    .then((res) => res.rows)
     .catch((err) => {
       console.log(err.message);
     });
