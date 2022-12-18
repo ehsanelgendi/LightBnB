@@ -15,7 +15,7 @@ const getUserWithEmail = function(email) {
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.getUserWithEmail = getUserWithEmail;
 
 /**
@@ -32,7 +32,7 @@ const getUserWithId = function(id) {
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.getUserWithId = getUserWithId;
 
 
@@ -51,7 +51,7 @@ const addUser =  function(user) {
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.addUser = addUser;
 
 /// Reservations
@@ -77,7 +77,7 @@ const getAllReservations = function(guest_id, limit = 10) {
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.getAllReservations = getAllReservations;
 
 /// Properties
@@ -112,13 +112,13 @@ const getAllProperties = function(options, limit = 10) {
 
   // query if user input a minimum_price_per_night
   if (options.minimum_price_per_night) {
-    queryParams.push((options.minimum_price_per_night)*100);
+    queryParams.push((options.minimum_price_per_night) * 100);
     queryString += `AND cost_per_night >= $${queryParams.length} `;
   }
 
   // query if user input a maximum_price_per_night
   if (options.maximum_price_per_night) {
-    queryParams.push((options.maximum_price_per_night)*100);
+    queryParams.push((options.maximum_price_per_night) * 100);
     if (options.minimum_price_per_night) {
       queryString += `AND cost_per_night BETWEEN $${queryParams.length - 1} AND $${queryParams.length}`;
     } else {
@@ -132,7 +132,7 @@ const getAllProperties = function(options, limit = 10) {
     queryString += `AND rating >= $${queryParams.length}`;
   }
 
-  // concat the rest of the query, 
+  // concat the rest of the query,
   queryParams.push(limit);
   queryString += `
   GROUP BY properties.id
@@ -146,7 +146,7 @@ const getAllProperties = function(options, limit = 10) {
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.getAllProperties = getAllProperties;
 
 
@@ -169,5 +169,5 @@ const addProperty = function(property) {
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.addProperty = addProperty;
