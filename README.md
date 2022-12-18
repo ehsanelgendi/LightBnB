@@ -2,6 +2,12 @@
 
 A simple multi-page Airbnb clone that uses a server side Javascript to display the information from queries to web pages via SQL queries, search listings, create an account, create new properties, view your reservations and your listings.
 
+# Final Product
+
+!["Screenshot of tweeter desktop view"](https://github.com/ehsanelgendi/LightBnB/blob/main/docs/lightbnb.png?raw=true)
+
+
+
 # Getting Started
 
 1. Clone this repository into your local machine.
@@ -29,9 +35,4 @@ A simple multi-page Airbnb clone that uses a server side Javascript to display t
 
 ## Dev Dependencies
 - nodemon
-
-
-# Final Product
-
-
 
